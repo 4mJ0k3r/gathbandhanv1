@@ -1,0 +1,20 @@
+# Development stage
+FROM node:20-alpine AS dev
+
+# Install dependencies needed for native modules
+RUN apk add --no-cache python3 make g++
+
+WORKDIR /app
+
+# Install dependencies
+COPY package.json package-lock.json* ./
+RUN npm ci
+
+# Copy source code
+COPY . .
+
+# Expose dev server port
+EXPOSE 3000
+
+# Start dev server
+CMD ["npm", "run", "dev"]

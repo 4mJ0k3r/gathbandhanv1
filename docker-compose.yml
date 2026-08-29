@@ -1,0 +1,31 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: gathbandhan-app
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+      - NEXT_TELEMETRY_DISABLED=1
+      - MONGODB_URI=${MONGODB_URI}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+    restart: unless-stopped
+    networks:
+      - gathbandhan-net
+
+  # MongoDB Atlas is used as the database (cloud, free tier M0)
+  # Connection via MONGODB_URI env var — no local DB service needed
+  # For production, Vercel connects to the same Atlas cluster
+
+networks:
+  gathbandhan-net:
+    driver: bridge
+
+# volumes:
+#   pgdata:
