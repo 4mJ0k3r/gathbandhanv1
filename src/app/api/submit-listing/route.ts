@@ -1,17 +1,19 @@
 import { NextResponse } from "next/server";
-import { getCollection } from "@/lib/mongodb";
 import { getResend } from "@/lib/email";
 import { vendorSchema } from "@/lib/validation";
 import { generateSlug } from "@/lib/utils";
-import { VENDOR_CATEGORIES, VENDOR_STATUSES } from "@/lib/constants";
+import { CITY, FROM_EMAIL } from "@/lib/constants";
+import { getVendorsCollection } from "@/lib/vendors";
+
+export const runtime = "nodejs";
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    // Anti-spam: silently reject if honeypot is filled
-    if (body._honeypot && body._honeypot.trim() !== "") {
-      return NextResponse.json({ success: true }); // fake success to confuse bots
+    // Anti-spam: silently accept if the hidden honeypot field is filled.
+    if (body._honeypot && String(body._honeypot).trim() !== "") {
+      return NextResponse.json({ success: true });
     }
 
     const validated = vendorSchema.safeParse(body);
@@ -35,85 +37,65 @@ export async function POST(request: Request) {
       description,
     } = validated.data;
 
-    // Check for duplicate phone or email
-    const vendors = await getCollection("vendors");
-    const existing = await vendors.findOne({
-      $or: [
-        { phone: { $regex: `^${phone.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, $options: "i" } },
-        { email: email.toLowerCase() },
-      ],
-    });
+    const vendors = await getVendorsCollection();
+    const existing = await vendors.findOne({ $or: [{ phone }, { email }] });
 
     if (existing) {
       return NextResponse.json(
         {
           success: false,
-          errors: {
-            email: "This email or phone number is already registered.",
-          },
+          errors: { email: "This email or phone number is already registered." },
         },
         { status: 409 }
       );
     }
 
-    // Generate unique slug
-    const allSlugs = (await vendors.distinct("slug")) as string[];
-    const slug = generateSlug(business_name, allSlugs);
+    const allSlugs = await vendors.distinct("slug");
+    const slug = generateSlug(business_name, allSlugs as string[]);
+    const now = new Date();
 
-    // Clean up optional fields
-    const portfolio = portfolio_url && portfolio_url.trim() !== "" ? portfolio_url.trim() : undefined;
-    const desc = description && description.trim() !== "" ? description.trim() : undefined;
-
-    // City is fixed to Kota, Rajasthan
-    const cityValue = "Kota, Rajasthan";
-
-    const vendor = {
+    const result = await vendors.insertOne({
       slug,
-      business_name: business_name.trim(),
-      category: VENDOR_CATEGORIES.includes(category) ? category : "other",
-      city: cityValue,
-      contact_person: contact_person.trim(),
-      phone: phone.trim(),
-      email: email.toLowerCase(),
+      business_name,
+      category,
+      city: CITY,
+      contact_person,
+      phone,
+      email,
       instagram,
-      starting_price: starting_price ?? undefined,
-      portfolio_url: portfolio,
-      description: desc,
+      starting_price,
+      portfolio_url,
+      description,
       photos: [],
-      status: VENDOR_STATUSES[0], // "pending"
+      status: "pending",
       is_verified: false,
       is_featured: false,
       claimed_by_vendor: false,
       view_count: 0,
       inquiry_count: 0,
-      created_at: new Date(),
-      updated_at: new Date(),
-    };
+      created_at: now,
+      updated_at: now,
+    });
 
-    const result = await vendors.insertOne(vendor);
-    const vendorId = result.insertedId.toString();
-
-    // Send confirmation email to vendor
+    // A failed confirmation email must not fail the submission.
     try {
-      const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-
       await getResend().emails.send({
-        from: "Gathbandhan <hello@gathbandhan.in>",
+        from: FROM_EMAIL,
         to: [email],
         subject: "You're on the list — Gathbandhan",
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h1 style="color: #c81d5e;">Thanks, ${contact_person}!</h1>
-            <p>We've received your listing for <strong>${business_name}</strong> in <strong>Kota, Rajasthan</strong>.</p>
+            <h1 style="color: #8B5CF6;">Thanks, ${contact_person}!</h1>
+            <p>We've received your listing for <strong>${business_name}</strong> in <strong>${CITY}</strong>.</p>
             <p>Here's what happens next:</p>
             <ol>
               <li>We'll review your listing within 24 hours</li>
               <li>Your listing goes live on the platform</li>
               <li>We'll give you a call this week to say hi</li>
             </ol>
-            <p>Questions? Reply to this email or WhatsApp us.</p>
-            <hr style="margin: 24px 0;" />
-            <p style="color: #666; font-size: 14px;">— The Gathbandhan Team</p>
+            <p>Questions? Just reply to this email.</p>
+            <hr style="margin: 24px 0; border: none; border-top: 1px solid #E4E4E7;" />
+            <p style="color: #6B7280; font-size: 14px;">— The Gathbandhan Team</p>
           </div>
         `,
       });
@@ -121,14 +103,14 @@ export async function POST(request: Request) {
       console.error("Failed to send confirmation email:", emailError);
     }
 
-    return NextResponse.json(
-      { success: true, vendor_id: vendorId },
-      { status: 200 }
-    );
+    return NextResponse.json({ success: true, vendor_id: result.insertedId.toString() });
   } catch (error) {
     console.error("Error in submit-listing:", error);
     return NextResponse.json(
-      { success: false, message: "Something went wrong on our end. We'll get back to you shortly." },
+      {
+        success: false,
+        message: "Something went wrong on our end. We'll get back to you shortly.",
+      },
       { status: 500 }
     );
   }
