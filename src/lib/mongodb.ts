@@ -1,22 +1,19 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, type Document } from "mongodb";
 
-function getUri(): string | undefined {
-  return process.env.MONGODB_URI;
-}
+const DB_NAME = "gathbandhan";
 
-let clientPromise: Promise<import("mongodb").MongoClient> | null = null;
+let clientPromise: Promise<MongoClient> | null = null;
 
-export async function getCollection<T extends Record<string, unknown>>(name: string) {
-  const uri = getUri();
+export async function getCollection<T extends Document>(name: string) {
+  const uri = process.env.MONGODB_URI;
   if (!uri) {
     throw new Error("MONGODB_URI is not configured");
   }
 
   if (!clientPromise) {
-    const client = new MongoClient(uri);
-    clientPromise = client.connect();
+    clientPromise = new MongoClient(uri).connect();
   }
+
   const client = await clientPromise;
-  const db = client.db("gathbandhan");
-  return db.collection<T>(name);
+  return client.db(DB_NAME).collection<T>(name);
 }

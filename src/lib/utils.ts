@@ -1,5 +1,5 @@
-import type { VendorCard, VendorCategory } from "./types";
 import { CATEGORY_LABELS } from "./constants";
+import type { VendorCategory } from "./types";
 
 export function generateSlug(businessName: string, existingSlugs: string[]): string {
   const base = businessName
@@ -24,12 +24,5 @@ export function formatPrice(price: number | undefined): string {
 }
 
 export function getCategoryLabel(category: string): string {
-  return CATEGORY_LABELS[category] || category;
-}
-
-export function sortVendors(vendors: VendorCard[]): VendorCard[] {
-  return [...vendors].sort((a, b) => {
-    if (a.is_verified !== b.is_verified) return b.is_verified ? 1 : -1;
-    return (b.view_count || 0) - (a.view_count || 0);
-  });
+  return CATEGORY_LABELS[category as VendorCategory] ?? category;
 }

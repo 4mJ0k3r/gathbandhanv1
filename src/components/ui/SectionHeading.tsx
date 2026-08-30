@@ -4,9 +4,11 @@ type Align = "center" | "left";
 
 interface SectionHeadingProps {
   eyebrow?: string;
-  title: string;
-  subtitle?: string;
+  title: ReactNode;
+  subtitle?: ReactNode;
   align?: Align;
+  /** Tightens the bottom margin where a section's content follows immediately. */
+  tight?: boolean;
 }
 
 export default function SectionHeading({
@@ -14,11 +16,13 @@ export default function SectionHeading({
   title,
   subtitle,
   align = "center",
+  tight = false,
 }: SectionHeadingProps) {
-  const alignClasses = align === "center" ? "text-center" : "text-left";
+  const alignClasses =
+    align === "center" ? "text-center mx-auto" : "text-left";
 
   return (
-    <div className={`max-w-3xl ${alignClasses} mb-12`}>
+    <div className={`max-w-2xl ${alignClasses} ${tight ? "mb-8" : "mb-12"}`}>
       {eyebrow && (
         <span className="text-purple-500 text-xs font-semibold tracking-widest uppercase">
           {eyebrow}
@@ -28,7 +32,7 @@ export default function SectionHeading({
         {title}
       </h2>
       {subtitle && (
-        <p className="text-ink-500 mt-4 leading-relaxed">{subtitle}</p>
+        <p className="text-ink-500 mt-4 text-lg leading-relaxed">{subtitle}</p>
       )}
     </div>
   );
