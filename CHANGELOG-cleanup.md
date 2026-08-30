@@ -241,6 +241,12 @@ browser at 1440px and 390px:
 - Mobile menu opens, expands sections, and closes on navigation
 - FAQ accordion opens without JavaScript state
 
+One thing surfaced during that test: Resend returned 422 on the confirmation
+email because the test address was `@example.com`, which Resend rejects in
+sandbox mode. The submission itself still succeeded — the email send is wrapped
+so a delivery failure can't fail the listing — but it's worth sending yourself a
+real test submission to confirm the email path works end to end.
+
 ## Suggested next
 
 1. Decide the pink-vs-purple question — design.md is explicit about pink, and
