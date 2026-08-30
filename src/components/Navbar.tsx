@@ -1,13 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { ChevronDown, Menu, Search, X } from "lucide-react";
 import PillButton from "@/components/ui/PillButton";
-
-// ------------------------------------------------------------------
-// Data
-// ------------------------------------------------------------------
+import { CATEGORY_OPTIONS } from "@/lib/constants";
 
 interface NavItem {
   label: string;
@@ -21,97 +19,87 @@ const NAV_ITEMS: NavItem[] = [
     href: "/vendors",
     children: [
       { label: "All Vendors", href: "/vendors" },
-      { label: "Popular Cities", href: "/cities" },
-      { label: "Categories", href: "/categories" },
-      { label: "Community Picks", href: "/community-picks" },
+      ...CATEGORY_OPTIONS.map((cat) => ({
+        label: cat.label,
+        href: `/vendors?category=${cat.value}`,
+      })),
     ],
   },
-  {
-    label: "Services",
-    href: "/services",
-    children: [
-      { label: "Wedding Venues", href: "/services/venues" },
-      { label: "Decorators", href: "/services/decorators" },
-      { label: "Photographers", href: "/services/photographers" },
-      { label: "Invitations", href: "/services/invitations" },
-      { label: "Catering", href: "/services/catering" },
-      { label: "All Services", href: "/services" },
-    ],
-  },
-  {
-    label: "Categories",
-    href: "/vendors",
-    children: [
-      { label: "All Categories", href: "/vendors" },
-      { label: "Photographers", href: "/vendors?category=photographer" },
-      { label: "Makeup Artists", href: "/vendors?category=makeup" },
-      { label: "Decorators", href: "/vendors?category=decor" },
-      { label: "Venues", href: "/vendors?category=venue" },
-      { label: "Mehendi Artists", href: "/vendors?category=mehendi" },
-      { label: "Choreographers", href: "/vendors?category=choreographer" },
-      { label: "Wedding Cards", href: "/vendors?category=cards" },
-      { label: "Caterers", href: "/vendors?category=catering" },
-    ],
-  },
-  {
-    label: "Resources",
-    href: "/how-it-works",
-    children: [
-      { label: "How It Works", href: "/how-it-works" },
-      { label: "Budget Guide", href: "/how-it-works#budget" },
-      { label: "Vendor Tips", href: "/how-it-works#tips" },
-      { label: "FAQ", href: "/how-it-works#faq" },
-    ],
-  },
+  { label: "For Vendors", href: "/for-vendors" },
+  { label: "How It Works", href: "/how-it-works" },
   {
     label: "About",
     href: "/about",
     children: [
       { label: "Our Story", href: "/about#story" },
-      { label: "Team", href: "/about#team" },
-      { label: "Blog", href: "/blog" },
-      { label: "Press & Media", href: "/about#press" },
+      { label: "Contact", href: "/contact-us" },
     ],
   },
 ];
 
-// ------------------------------------------------------------------
-// Component
-// ------------------------------------------------------------------
+const SCROLL_THRESHOLD = 20;
+
+function subscribeToScroll(onChange: () => void) {
+  window.addEventListener("scroll", onChange, { passive: true });
+  return () => window.removeEventListener("scroll", onChange);
+}
+
+/** Subscribes to window scroll without a state-syncing effect. */
+function useHasScrolled() {
+  return useSyncExternalStore(
+    subscribeToScroll,
+    () => window.scrollY > SCROLL_THRESHOLD,
+    () => false
+  );
+}
 
 export default function Navbar() {
   const pathname = usePathname();
-  const isHomepage = pathname === "/";
-  const [pillMode, setPillMode] = useState(!isHomepage);
+  const router = useRouter();
+  const hasScrolled = useHasScrolled();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [expandedSections, setExpandedSections] = useState<string[]>([]);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const navRef = useRef<HTMLElement>(null);
 
-  // Scroll detection
-  useEffect(() => {
-    if (!isHomepage) {
-      setPillMode(true);
-      return;
-    }
-    const handleScroll = () => setPillMode(window.scrollY > 20);
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isHomepage]);
+  // The transparent overlay style only applies to the homepage hero.
+  const pillMode = pathname !== "/" || hasScrolled;
 
-  // Lock body scroll when mobile menu is open
   useEffect(() => {
-    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    if (!mobileOpen) return;
+    document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "";
     };
   }, [mobileOpen]);
 
-  // Close mobile menu on route change
+  // Escape closes an open dropdown; a click or focus outside the nav does too.
   useEffect(() => {
+    if (!activeDropdown) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActiveDropdown(null);
+    };
+    const handleOutside = (e: Event) => {
+      if (!navRef.current?.contains(e.target as Node)) setActiveDropdown(null);
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("pointerdown", handleOutside);
+    document.addEventListener("focusin", handleOutside);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("pointerdown", handleOutside);
+      document.removeEventListener("focusin", handleOutside);
+    };
+  }, [activeDropdown]);
+
+  const closeMenus = () => {
     setMobileOpen(false);
     setExpandedSections([]);
-  }, [pathname]);
+    setActiveDropdown(null);
+  };
 
   const toggleSection = (label: string) => {
     setExpandedSections((prev) =>
@@ -119,276 +107,241 @@ export default function Navbar() {
     );
   };
 
+  const submitSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = search.trim();
+    router.push(q ? `/vendors?search=${encodeURIComponent(q)}` : "/vendors");
+    closeMenus();
+  };
+
+  const searchIconClasses =
+    "absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-400 pointer-events-none";
+
   return (
-    <>
-      {/* Backdrop for open dropdowns */}
-      {activeDropdown && (
+    <nav
+      ref={navRef}
+      className={`fixed left-0 right-0 z-50 transition-all duration-500 ease-out ${
+        pillMode ? "top-3 md:top-4" : "top-0"
+      }`}
+    >
+      <div className="w-full">
         <div
-          className="fixed inset-0 z-40"
-          onClick={() => setActiveDropdown(null)}
-        />
-      )}
+          className={`flex items-center transition-all duration-500 ease-out ${
+            pillMode
+              ? "max-w-6xl mx-auto bg-white rounded-full shadow-card px-3 md:px-5 py-2"
+              : "max-w-7xl mx-auto bg-transparent px-4 md:px-6"
+          }`}
+        >
+          <Link href="/" className="flex-shrink-0" onClick={closeMenus}>
+            <span
+              className={`font-display text-5xl tracking-tight transition-colors duration-500 md:text-6xl ${
+                pillMode ? "text-purple-500" : "text-white drop-shadow-sm"
+              }`}
+            >
+              Gathbandhan
+            </span>
+          </Link>
 
-      <nav
-        className={`fixed left-0 right-0 z-50 transition-all duration-500 ease-out ${
-          pillMode ? "top-3 md:top-4" : "top-0"
-        }`}
-      >
-        {/* Full-width outer wrapper */}
-        <div className="w-full">
-          {/* Inner content: max-width + pill styling */}
-          <div
-            className={`
-              flex items-center transition-all duration-500 ease-out
-              ${pillMode
-                ? "max-w-6xl mx-auto bg-white rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.06)] px-3 md:px-5 py-2"
-                : "max-w-7xl mx-auto bg-transparent rounded-none shadow-none px-4 md:px-6"
-              }
-            `}
-          >
-            {/* ========== LEFT: Logo ========== */}
-            <Link href="/" className="flex-shrink-0">
-              <span
-                className="text-5xl md:text-6xl tracking-tight transition-colors duration-500"
-                style={{ fontFamily: '"Lavishly Yours", cursive' }}
-              >
-                <span className={pillMode ? "text-purple-500" : "text-white drop-shadow-sm"}>
-                  Gathbandhan
-                </span>
-              </span>
-            </Link>
+          <div className="flex-1" />
 
-            {/* Spacer pushes everything right */}
-            <div className="flex-1" />
-
-            {/* ========== RIGHT: Nav Links ========== */}
-            <ul className="hidden lg:flex items-center gap-1">
-              {NAV_ITEMS.map((item) => (
+          <ul className="hidden lg:flex items-center gap-1">
+            {NAV_ITEMS.map((item) => {
+              const isOpen = activeDropdown === item.label;
+              return (
                 <li
                   key={item.label}
                   className="relative"
-                  onMouseEnter={() =>
-                    item.children && setActiveDropdown(item.label)
-                  }
+                  onMouseEnter={() => item.children && setActiveDropdown(item.label)}
                   onMouseLeave={() => setActiveDropdown(null)}
                 >
-                  <Link
-                    href={item.href}
-                    className={`
-                      text-base font-medium transition-colors duration-300
-                      flex items-center gap-1 py-1 px-2 rounded-full
-                      ${pillMode
-                        ? "text-ink-700 hover:text-purple-500"
-                        : "text-white/90 hover:text-white"
-                      }
-                      ${activeDropdown === item.label
-                        ? pillMode
-                          ? "text-purple-500 bg-purple-50"
-                          : "text-white bg-white/10"
-                        : ""
-                      }
-                    `}
-                  >
-                    {item.label}
-                    {item.children && (
-                      <svg
-                        className={`w-3.5 h-3.5 transition-transform duration-200 ${
-                          activeDropdown === item.label ? "rotate-180" : ""
-                        }`}
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                      </svg>
-                    )}
-                  </Link>
-
-                  {/* Dropdown */}
-                  {activeDropdown === item.label && item.children && (
-                    <div
-                      className="absolute top-full pt-2"
-                      style={{ left: 0 }}
+                  <span className="flex items-center">
+                    <Link
+                      href={item.href}
+                      onClick={closeMenus}
+                      className={`flex items-center rounded-full px-2 py-1 text-base font-medium transition-colors duration-300 ${
+                        pillMode
+                          ? "text-ink-700 hover:text-purple-500"
+                          : "text-white/90 hover:text-white"
+                      } ${
+                        isOpen
+                          ? pillMode
+                            ? "text-purple-500 bg-purple-50"
+                            : "text-white bg-white/10"
+                          : ""
+                      }`}
                     >
-                      <div className="relative">
-                        {/* Arrow */}
-                        <div
-                          className="absolute -top-1.5 w-3 h-3 bg-white rotate-45
-                            border-l border-t border-gray-100 shadow-[0_1px_2px_rgba(0,0,0,0.04)]"
+                      {item.label}
+                    </Link>
+                    {item.children && (
+                      <button
+                        type="button"
+                        onClick={() => setActiveDropdown(isOpen ? null : item.label)}
+                        aria-expanded={isOpen}
+                        aria-haspopup="true"
+                        aria-label={`${item.label} menu`}
+                        className={`rounded-full p-1 transition-colors ${
+                          pillMode
+                            ? "text-ink-700 hover:text-purple-500"
+                            : "text-white/90 hover:text-white"
+                        }`}
+                      >
+                        <ChevronDown
+                          className={`h-3.5 w-3.5 transition-transform duration-200 ${
+                            isOpen ? "rotate-180" : ""
+                          }`}
+                          aria-hidden="true"
                         />
-                        <ul
-                          className="bg-white rounded-2xl py-2 min-w-[200px]
-                            shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.08)]
-                            border border-gray-50"
-                        >
-                          {item.children.map((child) => (
-                            <li key={child.href}>
-                              <Link
-                                href={child.href}
-                                className="block px-4 py-2.5 text-base text-ink-700
-                                  hover:text-purple-500 hover:bg-purple-50
-                                  transition-colors rounded-lg mx-1"
-                              >
-                                {child.label}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                      </button>
+                    )}
+                  </span>
+
+                  {isOpen && item.children && (
+                    <div className="absolute left-0 top-full pt-2">
+                      <ul className="min-w-[200px] rounded-2xl border border-ink-100 bg-white py-2 shadow-card">
+                        {item.children.map((child) => (
+                          <li key={child.href}>
+                            <Link
+                              href={child.href}
+                              onClick={closeMenus}
+                              className="mx-1 block rounded-lg px-4 py-2.5 text-base text-ink-700 transition-colors hover:bg-purple-50 hover:text-purple-500"
+                            >
+                              {child.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   )}
                 </li>
-              ))}
-            </ul>
+              );
+            })}
+          </ul>
 
-            {/* ========== RIGHT: Search Bar (hidden on mobile) ========== */}
-            <div className="hidden md:flex flex-1 justify-center px-4 lg:px-8">
-              <div className="relative w-full max-w-md">
-                <svg
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-500"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-                  />
-                </svg>
-                <input
-                  type="text"
-                  placeholder="Search vendors, services..."
-                  className={`
-                    w-full pl-10 pr-4 py-2 text-sm rounded-full
-                    border transition-colors duration-500
-                    focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500
-                    placeholder:text-ink-300
-                    ${pillMode
-                      ? "bg-gray-50 border-gray-100 text-ink-700"
-                      : "bg-white/10 border-white/20 text-white placeholder:text-white/60"
-                    }
-                  `}
-                />
-              </div>
+          <form
+            onSubmit={submitSearch}
+            role="search"
+            className="hidden md:flex flex-1 justify-center px-4 lg:px-8"
+          >
+            <div className="relative w-full max-w-md">
+              <label htmlFor="nav-search" className="sr-only">
+                Search vendors
+              </label>
+              <Search className={searchIconClasses} aria-hidden="true" />
+              <input
+                id="nav-search"
+                type="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search vendors..."
+                className={`w-full rounded-full border py-2 pl-10 pr-4 text-sm transition-colors duration-500 placeholder:text-ink-400 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/40 ${
+                  pillMode
+                    ? "bg-ink-100 border-ink-100 text-ink-700"
+                    : "bg-white/10 border-white/30 text-white placeholder:text-white/70"
+                }`}
+              />
             </div>
+          </form>
 
-            {/* ========== RIGHT: CTA ========== */}
-            <div className="hidden lg:block">
-              <PillButton href="/signup" size="sm">Join Free</PillButton>
-            </div>
-
-            {/* ========== Mobile Hamburger ========== */}
-            <button
-              className={`
-                lg:hidden p-2 -mr-2 transition-colors duration-300 ml-2
-                ${pillMode ? "text-ink-700" : "text-white"}
-              `}
-              onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label={mobileOpen ? "Close menu" : "Open menu"}
-              aria-expanded={mobileOpen}
-            >
-              {mobileOpen ? (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6h12" />
-                </svg>
-              ) : (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              )}
-            </button>
+          <div className="hidden lg:block">
+            <PillButton href="/signup" size="sm">
+              Join Free
+            </PillButton>
           </div>
 
-          {/* ========== Mobile Menu ========== */}
-          {mobileOpen && (
-            <div className="lg:hidden mt-3 mx-3 bg-white rounded-3xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.08)] overflow-hidden border border-gray-50">
-              {/* Search (mobile) */}
-              <div className="p-4 pb-2 md:hidden">
-                <div className="relative">
-                  <svg
-                    className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-500"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                  </svg>
-                  <input
-                    type="text"
-                    placeholder="Search vendors, services..."
-                    className="w-full pl-10 pr-4 py-2.5 text-sm rounded-full bg-gray-50 border border-gray-100 text-ink-700 focus:outline-none focus:ring-2 focus:ring-purple-500/20 focus:border-purple-500"
-                  />
-                </div>
-              </div>
+          <button
+            type="button"
+            className={`ml-2 -mr-2 p-2 transition-colors duration-300 lg:hidden ${
+              pillMode ? "text-ink-700" : "text-white"
+            }`}
+            onClick={() => (mobileOpen ? closeMenus() : setMobileOpen(true))}
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
+          >
+            {mobileOpen ? (
+              <X className="h-6 w-6" aria-hidden="true" />
+            ) : (
+              <Menu className="h-6 w-6" aria-hidden="true" />
+            )}
+          </button>
+        </div>
 
-              {/* Nav links with collapsible children */}
-              <div className="px-4 py-2">
-                {NAV_ITEMS.map((item) => (
-                  <div key={item.label} className="border-b border-gray-50 last:border-b-0">
+        {mobileOpen && (
+          <div className="mx-3 mt-3 overflow-hidden rounded-3xl border border-ink-100 bg-white shadow-card lg:hidden">
+            <form onSubmit={submitSearch} role="search" className="p-4 pb-2 md:hidden">
+              <div className="relative">
+                <label htmlFor="mobile-search" className="sr-only">
+                  Search vendors
+                </label>
+                <Search className={searchIconClasses} aria-hidden="true" />
+                <input
+                  id="mobile-search"
+                  type="search"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search vendors..."
+                  className="w-full rounded-full border border-ink-100 bg-ink-100 py-2.5 pl-10 pr-4 text-sm text-ink-700 placeholder:text-ink-400 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/40"
+                />
+              </div>
+            </form>
+
+            <div className="px-4 py-2">
+              {NAV_ITEMS.map((item) => {
+                const isExpanded = expandedSections.includes(item.label);
+                return (
+                  <div key={item.label} className="border-b border-ink-100 last:border-b-0">
                     <div className="flex items-center">
                       <Link
                         href={item.href}
-                        className="flex-1 py-3.5 text-ink-700 font-medium text-base hover:text-purple-500 transition-colors"
-                        onClick={() => setMobileOpen(false)}
+                        className="flex-1 py-3.5 text-base font-medium text-ink-700 transition-colors hover:text-purple-500"
+                        onClick={closeMenus}
                       >
                         {item.label}
                       </Link>
                       {item.children && (
                         <button
+                          type="button"
                           onClick={() => toggleSection(item.label)}
-                          className="p-2 text-ink-300 hover:text-purple-500 transition-colors"
-                          aria-expanded={expandedSections.includes(item.label)}
+                          className="p-2 text-ink-400 transition-colors hover:text-purple-500"
+                          aria-expanded={isExpanded}
+                          aria-label={`${isExpanded ? "Collapse" : "Expand"} ${item.label}`}
                         >
-                          <svg
-                            className={`w-5 h-5 transition-transform duration-200 ${
-                              expandedSections.includes(item.label) ? "rotate-180" : ""
+                          <ChevronDown
+                            className={`h-5 w-5 transition-transform duration-200 ${
+                              isExpanded ? "rotate-180" : ""
                             }`}
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            viewBox="0 0 24 24"
-                          >
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                          </svg>
+                            aria-hidden="true"
+                          />
                         </button>
                       )}
                     </div>
-                    {item.children && expandedSections.includes(item.label) && (
-                      <div className="pb-3 pl-2 space-y-1">
+                    {item.children && isExpanded && (
+                      <ul className="space-y-1 pb-3 pl-2">
                         {item.children.map((child) => (
-                          <Link
-                            key={child.href}
-                            href={child.href}
-                            className="block py-2.5 text-sm text-ink-500 hover:text-purple-500 transition-colors pl-2 border-l-2 border-gray-100 hover:border-purple-500"
-                            onClick={() => setMobileOpen(false)}
-                          >
-                            {child.label}
-                          </Link>
+                          <li key={child.href}>
+                            <Link
+                              href={child.href}
+                              className="block border-l-2 border-ink-100 py-2.5 pl-2 text-sm text-ink-500 transition-colors hover:border-purple-500 hover:text-purple-500"
+                              onClick={closeMenus}
+                            >
+                              {child.label}
+                            </Link>
+                          </li>
                         ))}
-                      </div>
+                      </ul>
                     )}
                   </div>
-                ))}
-              </div>
-
-              {/* CTA */}
-              <div className="p-4 pt-2">
-                <Link
-                  href="/signup"
-                  className="block w-full bg-purple-500 text-white text-center px-5 py-3 rounded-full font-semibold text-sm hover:bg-purple-600 transition-colors"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Join Free
-                </Link>
-              </div>
+                );
+              })}
             </div>
-          )}
-        </div>
-      </nav>
-    </>
+
+            <div className="p-4 pt-2">
+              <PillButton href="/signup" size="sm" className="w-full">
+                Join Free
+              </PillButton>
+            </div>
+          </div>
+        )}
+      </div>
+    </nav>
   );
 }
