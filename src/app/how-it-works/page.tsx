@@ -1,51 +1,140 @@
-import Link from "next/link";
+import type { Metadata } from "next";
+import Image from "next/image";
+import { Check } from "lucide-react";
+import CtaSection from "@/components/ui/CtaSection";
+import FaqAccordion, { type FaqItem } from "@/components/ui/FaqAccordion";
+import Section from "@/components/ui/Section";
+import SectionHeading from "@/components/ui/SectionHeading";
+import { IMAGES } from "@/lib/images";
+
+export const metadata: Metadata = {
+  title: "How It Works",
+  description:
+    "From listing to inquiry, here's how Gathbandhan connects wedding vendors with couples.",
+};
 
 const STEPS = [
-  { step: "1", title: "Fill in your details", desc: "Add your business info, photos, and pricing. Takes 2 minutes.", items: ["Business name and category", "Contact details and pricing", "Portfolio photos and description"] },
-  { step: "2", title: "We review and publish", desc: "Our team reviews your listing and publishes it within 24 hours.", items: ["Quick verification process", "Your listing goes live", "No hidden fees"] },
-  { step: "3", title: "Start getting inquiries", desc: "Couples find your listing and reach out directly to you.", items: ["Couples discover you", "Direct messages and calls", "Grow your business"] },
+  {
+    step: "1",
+    title: "Fill in your details",
+    desc: "Add your business info, pricing, and portfolio link. Takes 2 minutes.",
+    items: [
+      "Business name and category",
+      "Contact details and starting price",
+      "Portfolio link and description",
+    ],
+    image: IMAGES.receptionTable,
+  },
+  {
+    step: "2",
+    title: "We review and publish",
+    desc: "Our team verifies your details and publishes your listing within 24 hours.",
+    items: ["We call to verify your details", "Your listing goes live", "No fees, ever"],
+    image: IMAGES.ceremonyChairs,
+  },
+  {
+    step: "3",
+    title: "Start getting inquiries",
+    desc: "Couples find your listing and reach out to you directly by phone or WhatsApp.",
+    items: [
+      "Couples discover your work",
+      "Direct calls and messages",
+      "No commission on bookings",
+    ],
+    image: IMAGES.balloonRelease,
+  },
 ];
 
-const FAQS = [
-  { q: "Is it really free?", a: "Yes! Listing your business on Gathbandhan is completely free. No hidden fees, no commissions, no catch." },
-  { q: "How do couples contact me?", a: "Couples can call, WhatsApp, or email you directly through the contact details you provide on your listing." },
-  { q: "Can I edit my listing later?", a: "Absolutely. You can update your photos, pricing, and description anytime through our simple dashboard." },
-  { q: "How do I get verified?", a: "Once your listing is submitted, our team will call you to verify your details. Verified badges appear on your profile to build trust." },
-  { q: "How long does it take to go live?", a: "Most listings are published within 24 hours of submission, once verified." },
+const FAQS: readonly FaqItem[] = [
+  {
+    question: "Is it really free?",
+    answer:
+      "Yes. Listing your business on Gathbandhan is completely free. No listing fees, no commission on bookings.",
+  },
+  {
+    question: "How do couples contact me?",
+    answer:
+      "Couples call, WhatsApp, or email you directly using the contact details on your listing. Nothing routes through us.",
+  },
+  {
+    question: "Can I update my listing later?",
+    answer:
+      "Yes. Contact us with the changes you want and we'll update your listing for you — there's no vendor login yet.",
+  },
+  {
+    question: "How do I get verified?",
+    answer:
+      "Once you submit your listing, our team calls you to confirm your details. Verified listings show a badge on your profile.",
+  },
+  {
+    question: "How long does it take to go live?",
+    answer: "Most listings are published within 24 hours of submission, once verified.",
+  },
 ];
 
 export default function HowItWorksPage() {
   return (
     <div>
-      <section className="py-20 bg-surface-tint">
-        <div className="max-w-7xl mx-auto px-6 md:px-10 text-center">
-          <span className="text-purple-500 text-xs font-semibold tracking-widest uppercase">How It Works</span>
-          <h1 className="text-4xl md:text-5xl font-bold text-ink-900 tracking-tight mt-3">
-            From listing to booking
+      <Section background="tint" className="text-center">
+        <div className="mx-auto max-w-2xl">
+          <span className="text-xs font-semibold uppercase tracking-widest text-purple-500">
+            How It Works
+          </span>
+          <h1 className="mt-3 text-4xl font-bold tracking-tight text-ink-900 md:text-5xl">
+            From listing to inquiry
           </h1>
-          <p className="text-ink-500 mt-4 text-lg max-w-2xl mx-auto">From listing to booking, here&apos;s how Gathbandhan connects you with couples.</p>
+          <p className="mt-4 text-lg text-ink-500">
+            Three steps, and the first one takes two minutes.
+          </p>
         </div>
-      </section>
+      </Section>
 
-      <section className="py-12 bg-surface-base">
-        <div className="max-w-7xl mx-auto px-6 md:px-10">
-          <div className="space-y-6">
-            {STEPS.map((item, i) => (
-              <div key={item.step} className="bg-white rounded-3xl shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.06)] border border-purple-100/30 overflow-hidden">
+      <Section>
+        <div className="space-y-6">
+          {STEPS.map((item, i) => {
+            const photoRight = i % 2 === 1;
+            return (
+              <div
+                key={item.step}
+                className="overflow-hidden rounded-3xl border-card bg-white shadow-card"
+              >
                 <div className="md:flex">
-                  <div className={`md:w-1/2 relative min-h-[240px] ${i % 2 === 0 ? "" : "md:order-2"}`}>
-                    <div className="absolute inset-0 bg-gradient-to-br from-purple-200 to-purple-300" />
+                  <div
+                    className={`relative min-h-[240px] md:w-1/2 ${
+                      photoRight ? "md:order-2" : ""
+                    }`}
+                  >
+                    <Image
+                      src={item.image.src}
+                      alt={item.image.alt}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-cover"
+                    />
                   </div>
-                  <div className={`md:w-1/2 p-8 md:p-12 flex flex-col justify-center ${i % 2 === 0 ? "" : "md:order-1"}`}>
-                    <div className="w-10 h-10 bg-purple-500 text-white rounded-full flex items-center justify-center text-sm font-bold mb-4">{item.step}</div>
-                    <h3 className="text-2xl font-bold text-ink-900 tracking-tight mb-2">{item.title}</h3>
-                    <p className="text-ink-500 mb-4">{item.desc}</p>
+                  <div
+                    className={`flex flex-col justify-center p-8 md:w-1/2 md:p-12 ${
+                      photoRight ? "md:order-1" : ""
+                    }`}
+                  >
+                    <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-purple-500 text-sm font-bold text-white">
+                      {item.step}
+                    </div>
+                    <h2 className="mb-2 text-2xl font-bold tracking-tight text-ink-900">
+                      {item.title}
+                    </h2>
+                    <p className="mb-4 text-ink-500">{item.desc}</p>
                     <ul className="space-y-2">
                       {item.items.map((bullet) => (
-                        <li key={bullet} className="flex items-center gap-2 text-sm text-ink-700">
-                          <svg className="w-4 h-4 text-lime-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                          </svg>
+                        <li
+                          key={bullet}
+                          className="flex items-center gap-2 text-sm text-ink-700"
+                        >
+                          <Check
+                            className="h-4 w-4 shrink-0 text-lime-600"
+                            strokeWidth={2.5}
+                            aria-hidden="true"
+                          />
                           {bullet}
                         </li>
                       ))}
@@ -53,42 +142,21 @@ export default function HowItWorksPage() {
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
-      </section>
+      </Section>
 
-      <section className="py-20 bg-surface-tint">
-        <div className="max-w-3xl mx-auto px-6 md:px-10">
-          <div className="text-center mb-12">
-            <span className="text-purple-500 text-xs font-semibold tracking-widest uppercase">FAQ</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-ink-900 tracking-tight mt-3">Frequently Asked Questions</h2>
-          </div>
-          <div className="space-y-3">
-            {FAQS.map((faq, i) => (
-              <details key={i} className="bg-white rounded-2xl border border-purple-100/30 overflow-hidden group">
-                <summary className="flex items-center justify-between p-6 cursor-pointer text-ink-900 font-semibold hover:text-purple-500 transition-colors list-none">
-                  {faq.q}
-                  <svg className="w-5 h-5 text-ink-300 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </summary>
-                <div className="px-6 pb-6 text-ink-500 text-sm leading-relaxed">{faq.a}</div>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
+      <Section id="faq" background="tint" width="narrow">
+        <SectionHeading eyebrow="FAQ" title="Frequently Asked Questions" />
+        <FaqAccordion items={FAQS} />
+      </Section>
 
-      <section className="py-20 bg-surface-base">
-        <div className="max-w-3xl mx-auto px-6 md:px-10 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-ink-900 tracking-tight">Ready to get started?</h2>
-          <p className="text-ink-500 mt-4 text-lg">List your business for free and start getting inquiries today.</p>
-          <Link href="/signup" className="inline-block mt-8 bg-purple-500 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-purple-600 transition-colors">
-            List Your Business — Free
-          </Link>
-        </div>
-      </section>
+      <CtaSection
+        title="Ready to get started?"
+        subtitle="List your business for free and start getting inquiries."
+        primary={{ label: "List Your Business — Free", href: "/signup" }}
+      />
     </div>
   );
 }
