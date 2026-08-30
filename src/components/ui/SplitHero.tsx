@@ -8,6 +8,8 @@ interface SplitHeroProps {
   reversed?: boolean;
   /** Narrower panel for the vendor profile header. */
   textWidth?: "half" | "twoFifths";
+  /** Set on above-the-fold heroes so the photo isn't lazy-loaded. */
+  priority?: boolean;
 }
 
 /**
@@ -19,6 +21,7 @@ export default function SplitHero({
   image,
   reversed = false,
   textWidth = "half",
+  priority = false,
 }: SplitHeroProps) {
   const textPanel = textWidth === "half" ? "md:w-1/2" : "md:w-2/5";
   const imagePanel = textWidth === "half" ? "md:w-1/2" : "md:w-3/5";
@@ -42,6 +45,7 @@ export default function SplitHero({
             src={image.src}
             alt={image.alt}
             fill
+            priority={priority}
             className="object-cover"
             sizes="(max-width: 768px) 100vw, 50vw"
           />

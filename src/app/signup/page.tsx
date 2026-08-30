@@ -21,7 +21,7 @@ export default function SignupPage() {
   return (
     <div>
       <section className="mx-6 mt-4 md:mx-10">
-        <SplitHero image={IMAGES.receptionTable}>
+        <SplitHero image={IMAGES.receptionTable} priority>
           <span className="text-xs font-semibold uppercase tracking-widest text-purple-500">
             For Vendors
           </span>

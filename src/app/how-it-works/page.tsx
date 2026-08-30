@@ -108,6 +108,7 @@ export default function HowItWorksPage() {
                       src={item.image.src}
                       alt={item.image.alt}
                       fill
+                      priority={i === 0}
                       sizes="(max-width: 768px) 100vw, 50vw"
                       className="object-cover"
                     />
