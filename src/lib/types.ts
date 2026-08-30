@@ -1,30 +1,3 @@
-export interface VendorCard {
-  _id?: string;
-  slug: string;
-  business_name: string;
-  category: VendorCategory;
-  city: string;
-  starting_price?: number;
-  photos: string[];
-  description?: string;
-  contact_person: string;
-  phone: string;
-  email: string;
-  instagram?: string;
-  portfolio_url?: string;
-  is_verified: boolean;
-  view_count: number;
-  status: VendorStatus;
-  _honeypot?: string;
-  created_at: Date;
-  updated_at: Date;
-}
-
-export interface VendorProfile extends VendorCard {
-  instagram?: string;
-  portfolio_url?: string;
-}
-
 export type VendorCategory =
   | "photographer"
   | "makeup"
@@ -36,3 +9,25 @@ export type VendorCategory =
   | "catering";
 
 export type VendorStatus = "pending" | "approved" | "rejected";
+
+/** Public fields for a listing card. No contact details. */
+export interface VendorCardData {
+  _id: string;
+  slug: string;
+  business_name: string;
+  category: VendorCategory;
+  city: string;
+  starting_price?: number;
+  photos: string[];
+  is_verified: boolean;
+  view_count: number;
+}
+
+/** Public fields for a profile page, including contact details. */
+export interface VendorProfileData extends VendorCardData {
+  description?: string;
+  phone: string;
+  email: string;
+  instagram?: string;
+  portfolio_url?: string;
+}
