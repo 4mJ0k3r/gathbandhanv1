@@ -1,9 +1,10 @@
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
 import { getResend } from "@/lib/email";
 import { vendorSchema } from "@/lib/validation";
 import { generateSlug } from "@/lib/utils";
 import { CITY, FROM_EMAIL } from "@/lib/constants";
 import { getVendorsCollection } from "@/lib/vendors";
+import { notifyVendorSubmission } from "@/lib/sheets-notify";
 
 export const runtime = "nodejs";
 
@@ -102,6 +103,11 @@ export async function POST(request: Request) {
     } catch (emailError) {
       console.error("Failed to send confirmation email:", emailError);
     }
+
+    // Secondary notification path: mirror the submission to the owner's
+    // Google Sheet. Runs after the response is sent, fire-and-forget — a
+    // Sheets failure must not fail the submission, so it only logs.
+    after(() => notifyVendorSubmission(validated.data));
 
     return NextResponse.json({ success: true, vendor_id: result.insertedId.toString() });
   } catch (error) {
