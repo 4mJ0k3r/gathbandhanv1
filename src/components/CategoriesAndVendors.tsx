@@ -22,11 +22,11 @@ function PanelHeading({
 }) {
   return (
     <>
-      <span className="relative inline-block pb-1 text-xs font-semibold uppercase tracking-widest text-purple-800">
+      <span className="relative inline-block pb-1 text-xs font-semibold uppercase tracking-widest text-brand-800">
         {eyebrow}
-        <span className="absolute bottom-0 left-0 h-0.5 w-8 rounded-full bg-purple-500/40" />
+        <span className="absolute bottom-0 left-0 h-0.5 w-8 rounded-full bg-brand-500/40" />
       </span>
-      <h2 className="mt-3 text-2xl md:text-3xl font-bold leading-tight tracking-tight text-ink-900 text-shadow-panel">
+      <h2 className="mt-3 font-display text-2xl font-normal leading-tight text-ink-900 text-shadow-panel md:text-3xl">
         {title}
       </h2>
       <p className="mt-2.5 max-w-xl text-base leading-relaxed text-ink-700">
@@ -40,9 +40,9 @@ function PanelLink({ href, children }: { href: string; children: string }) {
   return (
     <Link
       href={href}
-      className="group inline-flex items-center gap-2 rounded-full bg-white/90 py-2.5 pl-2 pr-4 text-sm font-semibold text-purple-800 shadow-panel-sm transition-all duration-300 hover:bg-white hover:shadow-panel-sm-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2"
+      className="group inline-flex items-center gap-2 rounded-full bg-white/90 py-2.5 pl-2 pr-4 text-sm font-semibold text-brand-800 shadow-panel-sm transition-all duration-300 hover:bg-white hover:shadow-panel-sm-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2"
     >
-      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-lime-400 text-ink-900 transition-colors duration-200 group-hover:bg-lime-500">
+      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gold-400 text-ink-900 transition-colors duration-200 group-hover:bg-gold-500">
         <ChevronRight className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
       </span>
       {children}
@@ -66,10 +66,10 @@ export default function CategoriesAndVendors() {
 
   return (
     <section className="px-6 py-20 md:px-10">
-      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl bg-gradient-to-br from-purple-200 via-purple-300 to-purple-200 shadow-panel">
+      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-3xl bg-gradient-to-br from-gold-100 via-brand-100 to-gold-200 shadow-panel">
         {/* Softens the gradient into a frosted panel. */}
         <div
-          className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_20%,rgba(255,255,255,0.45),transparent_60%),radial-gradient(ellipse_at_80%_80%,rgba(139,92,246,0.18),transparent_60%)]"
+          className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_20%,rgba(255,255,255,0.5),transparent_60%),radial-gradient(ellipse_at_80%_80%,rgba(166,41,74,0.12),transparent_60%)]"
           aria-hidden="true"
         />
 
@@ -91,9 +91,9 @@ export default function CategoriesAndVendors() {
                 <li key={cat.value}>
                   <Link
                     href={`/vendors?category=${cat.value}`}
-                    className="group flex h-full flex-col items-center gap-2.5 rounded-2xl border border-white/40 bg-white/30 p-4 backdrop-blur-sm transition-all duration-300 hover:border-white/60 hover:bg-white/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-600 focus-visible:ring-offset-2 md:p-5"
+                    className="group flex h-full flex-col items-center gap-2.5 rounded-2xl border border-white/40 bg-white/30 p-4 backdrop-blur-sm transition-all duration-300 hover:border-white/60 hover:bg-white/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 md:p-5"
                   >
-                    <span className="text-purple-700 transition-transform duration-300 group-hover:scale-110">
+                    <span className="text-brand-700 transition-transform duration-300 group-hover:scale-110">
                       <CategoryIcon type={cat.value} />
                     </span>
                     <span className="text-center text-xs font-medium leading-snug text-ink-800">

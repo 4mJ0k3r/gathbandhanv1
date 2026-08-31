@@ -120,14 +120,14 @@ export default function VendorResults({
           <button
             type="button"
             onClick={onClearFilters}
-            className="mt-4 text-sm font-medium text-purple-500 hover:underline"
+            className="mt-4 text-sm font-medium text-brand-500 hover:underline"
           >
             Clear filters
           </button>
         ) : (
           <p className="mt-2 text-sm text-ink-500">
             Are you a vendor?{" "}
-            <Link href="/signup" className="font-medium text-purple-500 hover:underline">
+            <Link href="/signup" className="font-medium text-brand-500 hover:underline">
               List your business
             </Link>
           </p>

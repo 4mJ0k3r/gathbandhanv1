@@ -134,8 +134,8 @@ export default function Navbar() {
         >
           <Link href="/" className="flex-shrink-0" onClick={closeMenus}>
             <span
-              className={`font-display text-5xl tracking-tight transition-colors duration-500 md:text-6xl ${
-                pillMode ? "text-purple-500" : "text-white drop-shadow-sm"
+              className={`font-display text-3xl tracking-tight transition-colors duration-500 md:text-4xl ${
+                pillMode ? "text-brand-600" : "text-white drop-shadow-sm"
               }`}
             >
               Gathbandhan
@@ -160,12 +160,12 @@ export default function Navbar() {
                       onClick={closeMenus}
                       className={`flex items-center rounded-full px-2 py-1 text-base font-medium transition-colors duration-300 ${
                         pillMode
-                          ? "text-ink-700 hover:text-purple-500"
+                          ? "text-ink-700 hover:text-brand-500"
                           : "text-white/90 hover:text-white"
                       } ${
                         isOpen
                           ? pillMode
-                            ? "text-purple-500 bg-purple-50"
+                            ? "text-brand-500 bg-brand-50"
                             : "text-white bg-white/10"
                           : ""
                       }`}
@@ -181,7 +181,7 @@ export default function Navbar() {
                         aria-label={`${item.label} menu`}
                         className={`rounded-full p-1 transition-colors ${
                           pillMode
-                            ? "text-ink-700 hover:text-purple-500"
+                            ? "text-ink-700 hover:text-brand-500"
                             : "text-white/90 hover:text-white"
                         }`}
                       >
@@ -203,7 +203,7 @@ export default function Navbar() {
                             <Link
                               href={child.href}
                               onClick={closeMenus}
-                              className="mx-1 block rounded-lg px-4 py-2.5 text-base text-ink-700 transition-colors hover:bg-purple-50 hover:text-purple-500"
+                              className="mx-1 block rounded-lg px-4 py-2.5 text-base text-ink-700 transition-colors hover:bg-brand-50 hover:text-brand-500"
                             >
                               {child.label}
                             </Link>
@@ -233,12 +233,16 @@ export default function Navbar() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search vendors..."
-                className={`w-full rounded-full border py-2 pl-10 pr-4 text-sm transition-colors duration-500 placeholder:text-ink-400 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/40 ${
+                className={`w-full rounded-full border py-2 pl-10 pr-4 text-sm transition-colors duration-500 placeholder:text-ink-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/40 ${
                   pillMode
                     ? "bg-ink-100 border-ink-100 text-ink-700"
                     : "bg-white/10 border-white/30 text-white placeholder:text-white/70"
                 }`}
               />
+              {/* A submit control makes Enter submit reliably in every engine. */}
+              <button type="submit" className="sr-only">
+                Search
+              </button>
             </div>
           </form>
 
@@ -279,8 +283,11 @@ export default function Navbar() {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search vendors..."
-                  className="w-full rounded-full border border-ink-100 bg-ink-100 py-2.5 pl-10 pr-4 text-sm text-ink-700 placeholder:text-ink-400 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/40"
+                  className="w-full rounded-full border border-ink-100 bg-ink-100 py-2.5 pl-10 pr-4 text-sm text-ink-700 placeholder:text-ink-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/40"
                 />
+                <button type="submit" className="sr-only">
+                  Search
+                </button>
               </div>
             </form>
 
@@ -292,7 +299,7 @@ export default function Navbar() {
                     <div className="flex items-center">
                       <Link
                         href={item.href}
-                        className="flex-1 py-3.5 text-base font-medium text-ink-700 transition-colors hover:text-purple-500"
+                        className="flex-1 py-3.5 text-base font-medium text-ink-700 transition-colors hover:text-brand-500"
                         onClick={closeMenus}
                       >
                         {item.label}
@@ -301,7 +308,7 @@ export default function Navbar() {
                         <button
                           type="button"
                           onClick={() => toggleSection(item.label)}
-                          className="p-2 text-ink-400 transition-colors hover:text-purple-500"
+                          className="p-2 text-ink-400 transition-colors hover:text-brand-500"
                           aria-expanded={isExpanded}
                           aria-label={`${isExpanded ? "Collapse" : "Expand"} ${item.label}`}
                         >
@@ -320,7 +327,7 @@ export default function Navbar() {
                           <li key={child.href}>
                             <Link
                               href={child.href}
-                              className="block border-l-2 border-ink-100 py-2.5 pl-2 text-sm text-ink-500 transition-colors hover:border-purple-500 hover:text-purple-500"
+                              className="block border-l-2 border-ink-100 py-2.5 pl-2 text-sm text-ink-500 transition-colors hover:border-brand-500 hover:text-brand-500"
                               onClick={closeMenus}
                             >
                               {child.label}

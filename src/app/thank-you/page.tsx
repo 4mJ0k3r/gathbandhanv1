@@ -18,15 +18,15 @@ export default function ThankYouPage() {
   return (
     <div className="flex min-h-[70vh] items-center justify-center bg-surface-tint py-20">
       <div className="mx-auto max-w-lg px-6 text-center md:px-10">
-        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-purple-50">
+        <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-brand-50">
           <CheckCircle2
-            className="h-10 w-10 text-purple-500"
+            className="h-10 w-10 text-brand-500"
             strokeWidth={1.5}
             aria-hidden="true"
           />
         </div>
 
-        <h1 className="text-3xl font-bold tracking-tight text-ink-900 md:text-4xl">
+        <h1 className="font-display text-3xl font-normal text-ink-900 md:text-4xl">
           Thank you for signing up!
         </h1>
         <p className="mt-4 text-lg leading-relaxed text-ink-500">
@@ -40,7 +40,7 @@ export default function ThankYouPage() {
               key={step}
               className="flex items-center gap-4 rounded-2xl border-card bg-white p-4"
             >
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-purple-500 text-sm font-bold text-white">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-500 text-sm font-bold text-white">
                 {i + 1}
               </span>
               <span className="text-sm text-ink-700">{step}</span>

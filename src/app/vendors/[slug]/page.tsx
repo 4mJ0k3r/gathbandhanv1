@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, AtSign, BadgeCheck, Mail, Phone } from "lucide-react";
+import { ArrowLeft, AtSign, Mail, Phone } from "lucide-react";
+import { LotusIcon } from "@/components/ui/Motifs";
 import Card from "@/components/ui/Card";
 import PillButton from "@/components/ui/PillButton";
 import StatBlock from "@/components/ui/StatBlock";
@@ -67,7 +68,7 @@ export default async function VendorProfilePage({ params }: PageProps) {
       <div className="mx-auto max-w-5xl px-6 py-20 md:px-10">
         <Link
           href="/vendors"
-          className="mb-6 inline-flex items-center gap-2 text-sm text-ink-500 transition-colors hover:text-purple-500"
+          className="mb-6 inline-flex items-center gap-2 text-sm text-ink-500 transition-colors hover:text-brand-500"
         >
           <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           Back to all vendors
@@ -78,12 +79,12 @@ export default async function VendorProfilePage({ params }: PageProps) {
             <div className="flex flex-col justify-between bg-surface-card p-8 md:w-2/5 md:p-10">
               <div>
                 {vendor.is_verified && (
-                  <span className="mb-4 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 text-xs font-semibold text-purple-700">
-                    <BadgeCheck className="h-3.5 w-3.5" aria-hidden="true" />
+                  <span className="mb-4 inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 text-xs font-semibold text-brand-700">
+                    <LotusIcon className="h-4 w-4" />
                     Verified
                   </span>
                 )}
-                <h1 className="text-3xl font-bold tracking-tight text-ink-900 md:text-4xl">
+                <h1 className="font-display text-3xl font-normal text-ink-900 md:text-4xl">
                   {vendor.business_name}
                 </h1>
                 <p className="mt-2 text-ink-500">
@@ -102,7 +103,7 @@ export default async function VendorProfilePage({ params }: PageProps) {
                 </PillButton>
               </div>
 
-              <div className="mt-8 grid grid-cols-2 gap-4 border-t border-purple-100/50 pt-6">
+              <div className="mt-8 grid grid-cols-2 gap-4 border-t border-brand-100/50 pt-6">
                 <StatBlock
                   value={formatPrice(vendor.starting_price)}
                   label="Starting price"
@@ -127,8 +128,8 @@ export default async function VendorProfilePage({ params }: PageProps) {
                   className="object-cover"
                 />
               ) : (
-                <div className="flex h-full items-center justify-center bg-gradient-to-br from-purple-200 to-purple-100 p-8">
-                  <span className="text-center text-2xl font-semibold text-purple-500">
+                <div className="flex h-full items-center justify-center bg-gradient-to-br from-brand-200 to-brand-100 p-8">
+                  <span className="text-center text-2xl font-semibold text-brand-500">
                     {vendor.business_name}
                   </span>
                 </div>
@@ -138,7 +139,7 @@ export default async function VendorProfilePage({ params }: PageProps) {
         </div>
 
         <Card padding="lg" className="mb-8">
-          <h2 className="mb-6 text-2xl font-bold tracking-tight text-ink-900">
+          <h2 className="mb-6 font-display text-2xl font-normal text-ink-900">
             Get in Touch
           </h2>
           <ul className="space-y-4">
@@ -151,9 +152,9 @@ export default async function VendorProfilePage({ params }: PageProps) {
                     {...("external" in row && row.external
                       ? { target: "_blank", rel: "noopener noreferrer" }
                       : {})}
-                    className="flex items-center gap-3 text-ink-700 transition-colors hover:text-purple-500"
+                    className="flex items-center gap-3 text-ink-700 transition-colors hover:text-brand-500"
                   >
-                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-50 text-purple-500">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-50 text-brand-500">
                       <Icon className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
                     </span>
                     <span className="font-medium">{row.label}</span>
@@ -169,7 +170,7 @@ export default async function VendorProfilePage({ params }: PageProps) {
                 href={vendor.portfolio_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-medium text-purple-500 hover:underline"
+                className="font-medium text-brand-500 hover:underline"
               >
                 {vendor.portfolio_url}
               </a>
@@ -179,7 +180,7 @@ export default async function VendorProfilePage({ params }: PageProps) {
 
         {galleryPhotos.length > 0 && (
           <Card padding="lg" className="mb-8">
-            <h2 className="mb-6 text-2xl font-bold tracking-tight text-ink-900">
+            <h2 className="mb-6 font-display text-2xl font-normal text-ink-900">
               Portfolio
             </h2>
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
@@ -203,7 +204,7 @@ export default async function VendorProfilePage({ params }: PageProps) {
 
         {similar.length > 0 && (
           <section>
-            <h2 className="mb-6 text-2xl font-bold tracking-tight text-ink-900">
+            <h2 className="mb-6 font-display text-2xl font-normal text-ink-900">
               Similar {getCategoryLabel(vendor.category)}s in {vendor.city}
             </h2>
             <div className="grid gap-6 md:grid-cols-3">

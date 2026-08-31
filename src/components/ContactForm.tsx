@@ -7,7 +7,7 @@ import { Loader2 } from "lucide-react";
 import { contactSchema, type ContactFormInput } from "@/lib/validation";
 
 const FIELD_BASE =
-  "w-full rounded-xl border bg-white px-4 py-3 text-sm text-ink-900 outline-none transition placeholder:text-ink-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/40";
+  "w-full rounded-xl border bg-white px-4 py-3 text-sm text-ink-900 outline-none transition placeholder:text-ink-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/40";
 
 const SUBJECTS = [
   { value: "general", label: "General Inquiry" },
@@ -18,7 +18,7 @@ const SUBJECTS = [
 ] as const;
 
 function fieldClasses(hasError: boolean) {
-  return `${FIELD_BASE} ${hasError ? "border-red-500" : "border-purple-100"}`;
+  return `${FIELD_BASE} ${hasError ? "border-red-500" : "border-brand-100"}`;
 }
 
 export default function ContactForm() {
@@ -63,7 +63,7 @@ export default function ContactForm() {
     return (
       <div
         role="status"
-        className="rounded-2xl border border-lime-300 bg-lime-100 p-8 text-center"
+        className="rounded-2xl border border-gold-300 bg-gold-100 p-8 text-center"
       >
         <h3 className="text-lg font-semibold text-ink-900">Message sent</h3>
         <p className="mt-2 text-sm text-ink-700">
@@ -186,7 +186,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="inline-flex items-center justify-center gap-2 rounded-full bg-purple-500 px-8 py-3.5 font-semibold text-white transition-colors hover:bg-purple-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-purple-300"
+        className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-500 px-8 py-3.5 font-semibold text-white transition-colors hover:bg-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-brand-300"
       >
         {isSubmitting ? (
           <>

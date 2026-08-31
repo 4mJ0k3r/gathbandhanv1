@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DM_Sans, Lavishly_Yours } from "next/font/google";
+import { DM_Sans, Rozha_One } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import PageOffset from "@/components/PageOffset";
@@ -12,12 +12,12 @@ const dmSans = DM_Sans({
   variable: "--font-dm-sans",
 });
 
-// Script wordmark, used only for the Gathbandhan logo.
-const lavishlyYours = Lavishly_Yours({
+// Devanagari display serif, used only for the wordmark and section headings.
+const rozhaOne = Rozha_One({
   weight: "400",
-  subsets: ["latin"],
+  subsets: ["latin", "devanagari"],
   display: "swap",
-  variable: "--font-lavishly-yours",
+  variable: "--font-rozha-one",
 });
 
 export const metadata: Metadata = {
@@ -39,12 +39,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`h-full antialiased ${dmSans.variable} ${lavishlyYours.variable}`}
+      className={`h-full antialiased ${dmSans.variable} ${rozhaOne.variable}`}
     >
       <body className="min-h-full flex flex-col font-sans bg-surface-base text-ink-900">
         <a
           href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-full focus:bg-purple-500 focus:px-5 focus:py-2 focus:text-sm focus:font-medium focus:text-white"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:rounded-full focus:bg-brand-500 focus:px-5 focus:py-2 focus:text-sm focus:font-medium focus:text-white"
         >
           Skip to content
         </a>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { BadgeCheck, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
+import { LotusIcon } from "@/components/ui/Motifs";
 import type { VendorCardData } from "@/lib/types";
 import { formatPrice, getCategoryLabel } from "@/lib/utils";
 
@@ -13,25 +14,26 @@ export default function VendorCard({ vendor }: VendorCardProps) {
 
   return (
     <article className="bg-white rounded-2xl overflow-hidden border-card shadow-card-sm hover:shadow-card transition-shadow duration-300 flex flex-col">
-      <div className="relative aspect-[4/3] bg-surface-card">
+      {/* The arch-top nods to a mandap without cropping the subject. */}
+      <div className="relative aspect-[4/3] bg-surface-card rounded-t-[3rem]">
         {coverPhoto ? (
           <Image
             src={coverPhoto}
             alt={`Work by ${vendor.business_name}`}
             fill
-            className="object-cover"
+            className="object-cover rounded-t-[3rem]"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 400px"
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-purple-200 to-purple-100 flex items-center justify-center p-4">
-            <span className="text-purple-500 text-lg font-semibold text-center leading-tight">
+          <div className="w-full h-full bg-gradient-to-br from-gold-100 to-brand-50 flex items-center justify-center p-4 rounded-t-[3rem]">
+            <span className="text-brand-600 text-lg font-semibold text-center leading-tight">
               {vendor.business_name}
             </span>
           </div>
         )}
         {vendor.is_verified && (
           <span className="absolute top-3 right-3 inline-flex items-center gap-1 bg-white/95 text-ink-800 text-xs font-semibold px-2.5 py-1 rounded-full shadow-card-sm">
-            <BadgeCheck className="w-3.5 h-3.5 text-purple-500" aria-hidden="true" />
+            <LotusIcon className="w-4 h-4 text-brand-500" />
             Verified
           </span>
         )}
@@ -50,7 +52,7 @@ export default function VendorCard({ vendor }: VendorCardProps) {
           </span>
           <Link
             href={`/vendors/${vendor.slug}`}
-            className="text-purple-600 text-sm font-medium hover:text-purple-700 inline-flex items-center gap-1 transition-colors"
+            className="text-brand-600 text-sm font-medium hover:text-brand-700 inline-flex items-center gap-1 transition-colors"
           >
             View Profile
             <ChevronRight className="w-4 h-4" aria-hidden="true" />
