@@ -1,6 +1,7 @@
 import Image from "next/image";
 import PillButton from "@/components/ui/PillButton";
 import StatBlock from "@/components/ui/StatBlock";
+import { PaisleyDivider } from "@/components/ui/Motifs";
 import CategoriesAndVendors from "@/components/CategoriesAndVendors";
 import { CITY_SHORT, VENDOR_CATEGORIES } from "@/lib/constants";
 import { IMAGES } from "@/lib/images";
@@ -28,10 +29,10 @@ export default function HomePage() {
         </div>
 
         <div className="animate-rise-in relative z-10 flex h-full flex-col items-center justify-center px-6 text-center">
-          <h1 className="max-w-4xl text-4xl font-semibold leading-[1.1] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
+          <h1 className="max-w-4xl font-display text-4xl font-normal leading-[1.15] text-white sm:text-5xl md:text-6xl lg:text-7xl">
             Find the Perfect
             <br />
-            <span className="text-lime-400">Wedding Vendors</span>
+            <span className="text-gold-300">Wedding Vendors</span>
           </h1>
 
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/80 sm:text-xl">
@@ -59,10 +60,15 @@ export default function HomePage() {
         </div>
 
         <div
-          className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent"
+          className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-surface-base to-transparent"
           aria-hidden="true"
         />
       </section>
+
+      {/* Motif punctuation between the hero and the category panel. */}
+      <div className="flex justify-center pt-14 text-brand-500/45">
+        <PaisleyDivider className="h-9 w-52" />
+      </div>
 
       <CategoriesAndVendors />
 
@@ -79,7 +85,7 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-black/40" aria-hidden="true" />
           <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
             <div>
-              <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              <h2 className="font-display text-3xl font-normal text-white sm:text-4xl">
                 Ready to Plan Your Big Day?
               </h2>
               <p className="mx-auto mt-3 max-w-lg text-lg text-white/80">

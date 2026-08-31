@@ -9,7 +9,7 @@ import { vendorSchema, type VendorFormInput } from "@/lib/validation";
 import { CATEGORY_OPTIONS, CITY } from "@/lib/constants";
 
 const FIELD_BASE =
-  "w-full rounded-xl border bg-white px-4 py-3 text-ink-900 outline-none transition placeholder:text-ink-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/40";
+  "w-full rounded-xl border bg-white px-4 py-3 text-ink-900 outline-none transition placeholder:text-ink-300 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/40";
 
 function fieldClasses(hasError: boolean) {
   return `${FIELD_BASE} ${hasError ? "border-red-500" : "border-ink-200"}`;
@@ -244,7 +244,7 @@ export default function SignupForm() {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="flex w-full items-center justify-center gap-2 rounded-full bg-purple-500 py-3.5 font-semibold text-white transition-colors hover:bg-purple-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-purple-300"
+        className="flex w-full items-center justify-center gap-2 rounded-full bg-brand-500 py-3.5 font-semibold text-white transition-colors hover:bg-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-brand-300"
       >
         {isSubmitting ? (
           <>

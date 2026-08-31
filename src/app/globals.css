@@ -1,43 +1,46 @@
 @import "tailwindcss";
 
 @theme {
-  /* Brand — purple is the single accent hue */
-  --color-purple-50: #F5F3FF;
-  --color-purple-100: #EDE9FE;
-  --color-purple-200: #DDD6FE;
-  --color-purple-300: #C4B5FD;
-  --color-purple-400: #A78BFA;
-  --color-purple-500: #8B5CF6;
-  --color-purple-600: #7C3AED;
-  --color-purple-700: #6D28D9;
-  --color-purple-800: #5B21B6;
+  /* Brand — deep sindoor maroon is the single primary accent hue. */
+  --color-brand-50: #FBF2F0;
+  --color-brand-100: #F6E3E0;
+  --color-brand-200: #ECC5C0;
+  --color-brand-300: #DE9C96;
+  --color-brand-400: #C4455E;
+  --color-brand-500: #A6294A;
+  --color-brand-600: #8B1E3F;
+  --color-brand-700: #701633;
+  --color-brand-800: #57102A;
 
-  /* Lime — secondary accent, used sparingly for highlights */
-  --color-lime-100: #ECFCCB;
-  --color-lime-300: #BEF264;
-  --color-lime-400: #A3E635;
-  --color-lime-500: #84CC16;
-  --color-lime-600: #65A30D;
+  /* Gold — marigold accent, used sparingly. Never carries white text. */
+  --color-gold-50: #FDF6EA;
+  --color-gold-100: #FAEDD2;
+  --color-gold-200: #F4DBA6;
+  --color-gold-300: #EDC470;
+  --color-gold-400: #E8A628;
+  --color-gold-500: #D9971F;
+  --color-gold-600: #B57A16;
+  --color-gold-700: #8F5F12;
 
   /* Ink — text and neutral borders */
   --color-ink-900: #0F0F14;
   --color-ink-800: #27272E;
   --color-ink-700: #3F3F46;
   --color-ink-600: #52525B;
-  --color-ink-500: #6B7280;
+  --color-ink-500: #5E6572;
   --color-ink-400: #9CA3AF;
   --color-ink-300: #D1D5DB;
   --color-ink-200: #E4E4E7;
   --color-ink-100: #F4F4F5;
 
-  /* Surfaces */
-  --color-surface-base: #FFFFFF;
-  --color-surface-tint: #F8F7FC;
-  --color-surface-card: #F0EEF8;
+  /* Surfaces — warm ivory instead of pure white. */
+  --color-surface-base: #FBF7F0;
+  --color-surface-tint: #F7F1E8;
+  --color-surface-card: #F6EDE1;
 
   /* Fonts are loaded and self-hosted by next/font in app/layout.tsx. */
   --font-sans: var(--font-dm-sans), system-ui, sans-serif;
-  --font-display: var(--font-lavishly-yours), cursive;
+  --font-display: var(--font-rozha-one), serif;
 }
 
 /* Card elevation. `card` is the section-level card, `card-sm` the compact one. */
@@ -53,32 +56,32 @@
     0 4px 16px rgba(0, 0, 0, 0.06);
 }
 
-/* Purple-tinted elevation for cards sitting on the lavender homepage panel. */
+/* Warm-tinted elevation for cards sitting on the homepage panel. */
 @utility shadow-panel {
   box-shadow:
-    0 4px 12px rgba(99, 72, 170, 0.12),
-    0 16px 48px rgba(99, 72, 170, 0.08);
+    0 4px 12px rgba(139, 30, 63, 0.12),
+    0 16px 48px rgba(139, 30, 63, 0.08);
 }
 
 @utility shadow-panel-sm {
   box-shadow:
-    0 1px 3px rgba(99, 72, 170, 0.12),
-    0 2px 8px rgba(99, 72, 170, 0.08);
+    0 1px 3px rgba(139, 30, 63, 0.12),
+    0 2px 8px rgba(139, 30, 63, 0.08);
 }
 
 @utility shadow-panel-sm-hover {
   box-shadow:
-    0 2px 6px rgba(99, 72, 170, 0.18),
-    0 4px 16px rgba(99, 72, 170, 0.12);
+    0 2px 6px rgba(139, 30, 63, 0.18),
+    0 4px 16px rgba(139, 30, 63, 0.12);
 }
 
-/* Hairline border used on every white card. */
+/* Hairline border used on every surface card. */
 @utility border-card {
   border-width: 1px;
-  border-color: color-mix(in srgb, var(--color-purple-100) 30%, transparent);
+  border-color: color-mix(in srgb, var(--color-brand-100) 30%, transparent);
 }
 
-/* Lifts text off the lavender homepage panel. */
+/* Lifts text off the homepage panel. */
 @utility text-shadow-panel {
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.45);
 }

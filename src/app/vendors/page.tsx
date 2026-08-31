@@ -14,10 +14,10 @@ function DirectoryFallback() {
     <div className="bg-surface-tint">
       <div className="mx-auto max-w-7xl px-6 py-20 md:px-10">
         <div className="mb-12 text-center">
-          <span className="text-xs font-semibold uppercase tracking-widest text-purple-500">
+          <span className="text-xs font-semibold uppercase tracking-widest text-brand-500">
             Browse
           </span>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight text-ink-900 md:text-5xl">
+          <h1 className="mt-3 font-display text-4xl font-normal text-ink-900 md:text-5xl">
             Wedding Vendors in {CITY}
           </h1>
           <p className="mt-4 text-lg text-ink-500">

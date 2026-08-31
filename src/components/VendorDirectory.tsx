@@ -41,10 +41,10 @@ export default function VendorDirectory() {
     <div className="bg-surface-tint">
       <div className="mx-auto max-w-7xl px-6 py-20 md:px-10">
         <div className="mb-12 text-center">
-          <span className="text-xs font-semibold uppercase tracking-widest text-purple-500">
+          <span className="text-xs font-semibold uppercase tracking-widest text-brand-500">
             Browse
           </span>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight text-ink-900 md:text-5xl">
+          <h1 className="mt-3 font-display text-4xl font-normal text-ink-900 md:text-5xl">
             Wedding Vendors in {CITY}
           </h1>
           <p className="mt-4 text-lg text-ink-500">
@@ -73,8 +73,12 @@ export default function VendorDirectory() {
               type="search"
               defaultValue={query}
               placeholder="Search vendors by name..."
-              className="w-full rounded-full border border-purple-100 bg-white py-3.5 pl-12 pr-4 text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/40"
+              className="w-full rounded-full border border-brand-100 bg-white py-3.5 pl-12 pr-4 text-ink-900 outline-none transition placeholder:text-ink-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/40"
             />
+            {/* A submit control makes Enter submit reliably in every engine. */}
+            <button type="submit" className="sr-only">
+              Search
+            </button>
           </div>
         </form>
 
@@ -87,8 +91,8 @@ export default function VendorDirectory() {
               aria-pressed={category === filter.value}
               className={`rounded-full px-5 py-2.5 text-sm font-medium transition-colors ${
                 category === filter.value
-                  ? "bg-purple-500 text-white"
-                  : "border border-purple-100 bg-white text-ink-700 hover:border-purple-300 hover:text-purple-500"
+                  ? "bg-brand-500 text-white"
+                  : "border border-brand-100 bg-white text-ink-700 hover:border-brand-300 hover:text-brand-500"
               }`}
             >
               {filter.label}

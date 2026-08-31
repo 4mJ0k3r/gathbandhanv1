@@ -43,10 +43,10 @@ export default function AboutPage() {
     <div>
       <Section background="tint" className="text-center">
         <div className="mx-auto max-w-3xl">
-          <span className="text-xs font-semibold uppercase tracking-widest text-purple-500">
+          <span className="text-xs font-semibold uppercase tracking-widest text-brand-500">
             About
           </span>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight text-ink-900 md:text-5xl">
+          <h1 className="mt-3 font-display text-4xl font-normal text-ink-900 md:text-5xl">
             Connecting couples in {CITY_SHORT} with wedding vendors they can trust
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-ink-500">
@@ -66,7 +66,7 @@ export default function AboutPage() {
       </Section>
 
       <Section id="story" background="tint" width="narrow">
-        <h2 className="mb-6 text-3xl font-bold tracking-tight text-ink-900 md:text-4xl">
+        <h2 className="mb-6 font-display text-3xl font-normal text-ink-900 md:text-4xl">
           Our Story
         </h2>
         <div className="space-y-4 leading-relaxed text-ink-500">
@@ -105,7 +105,7 @@ export default function AboutPage() {
             const Icon = value.icon;
             return (
               <Card key={value.title}>
-                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-50 text-purple-500">
+                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-500">
                   <Icon className="h-6 w-6" strokeWidth={1.5} aria-hidden="true" />
                 </div>
                 <h3 className="mb-2 text-lg font-semibold tracking-tight text-ink-900">

@@ -64,10 +64,10 @@ export default function ContactUsPage() {
     <div>
       <Section background="tint" className="text-center">
         <div className="mx-auto max-w-2xl">
-          <span className="text-xs font-semibold uppercase tracking-widest text-purple-500">
+          <span className="text-xs font-semibold uppercase tracking-widest text-brand-500">
             Contact
           </span>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight text-ink-900 md:text-5xl">
+          <h1 className="mt-3 font-display text-4xl font-normal text-ink-900 md:text-5xl">
             Get in Touch
           </h1>
           <p className="mt-4 text-lg text-ink-500">
@@ -83,7 +83,7 @@ export default function ContactUsPage() {
             const Icon = method.icon;
             const body = (
               <>
-                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-50 text-purple-500">
+                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-500">
                   <Icon className="h-6 w-6" strokeWidth={1.5} aria-hidden="true" />
                 </div>
                 <p className="text-xs font-semibold uppercase tracking-wider text-ink-500">
@@ -101,7 +101,7 @@ export default function ContactUsPage() {
                 {method.href ? (
                   <a
                     href={method.href}
-                    className="block transition-colors hover:text-purple-500"
+                    className="block transition-colors hover:text-brand-500"
                   >
                     {body}
                   </a>
@@ -115,7 +115,7 @@ export default function ContactUsPage() {
 
         <div className="grid gap-10 lg:grid-cols-5">
           <div className="lg:col-span-3">
-            <h2 className="mb-2 text-2xl font-bold tracking-tight text-ink-900">
+            <h2 className="mb-2 font-display text-2xl font-normal text-ink-900">
               Send us a message
             </h2>
             <p className="mb-8 text-sm text-ink-500">
@@ -134,7 +134,7 @@ export default function ContactUsPage() {
                   <li key={link.href}>
                     <a
                       href={link.href}
-                      className="text-sm text-ink-500 transition-colors hover:text-purple-500"
+                      className="text-sm text-ink-500 transition-colors hover:text-brand-500"
                     >
                       {link.label}
                     </a>

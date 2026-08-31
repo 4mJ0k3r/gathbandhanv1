@@ -77,10 +77,10 @@ export default function HowItWorksPage() {
     <div>
       <Section background="tint" className="text-center">
         <div className="mx-auto max-w-2xl">
-          <span className="text-xs font-semibold uppercase tracking-widest text-purple-500">
+          <span className="text-xs font-semibold uppercase tracking-widest text-brand-500">
             How It Works
           </span>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight text-ink-900 md:text-5xl">
+          <h1 className="mt-3 font-display text-4xl font-normal text-ink-900 md:text-5xl">
             From listing to inquiry
           </h1>
           <p className="mt-4 text-lg text-ink-500">
@@ -118,10 +118,10 @@ export default function HowItWorksPage() {
                       photoRight ? "md:order-1" : ""
                     }`}
                   >
-                    <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-purple-500 text-sm font-bold text-white">
+                    <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-brand-500 text-sm font-bold text-white">
                       {item.step}
                     </div>
-                    <h2 className="mb-2 text-2xl font-bold tracking-tight text-ink-900">
+                    <h2 className="mb-2 font-display text-2xl font-normal text-ink-900">
                       {item.title}
                     </h2>
                     <p className="mb-4 text-ink-500">{item.desc}</p>
@@ -132,7 +132,7 @@ export default function HowItWorksPage() {
                           className="flex items-center gap-2 text-sm text-ink-700"
                         >
                           <Check
-                            className="h-4 w-4 shrink-0 text-lime-600"
+                            className="h-4 w-4 shrink-0 text-gold-700"
                             strokeWidth={2.5}
                             aria-hidden="true"
                           />

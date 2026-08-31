@@ -10,7 +10,7 @@ interface StatBlockProps {
 }
 
 const valueClasses: Record<Tone, string> = {
-  card: "text-4xl md:text-5xl font-bold text-purple-500",
+  card: "text-4xl md:text-5xl font-bold text-brand-500",
   plain: "text-2xl md:text-3xl font-bold text-ink-900",
   onDark: "text-2xl sm:text-3xl font-semibold text-white",
 };

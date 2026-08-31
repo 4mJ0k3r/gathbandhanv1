@@ -25,11 +25,11 @@ const sizeClasses: Record<Size, string> = {
 };
 
 const variantClasses: Record<Variant, string> = {
-  primary: "bg-purple-500 text-white hover:bg-purple-600",
+  primary: "bg-brand-500 text-white hover:bg-brand-600",
   secondary:
-    "bg-white text-purple-500 border-2 border-purple-500 hover:bg-purple-50",
+    "bg-white text-brand-500 border-2 border-brand-500 hover:bg-brand-50",
   outline:
-    "bg-white text-ink-700 border border-purple-100 hover:border-purple-300 hover:text-purple-500",
+    "bg-white text-ink-700 border border-brand-100 hover:border-brand-300 hover:text-brand-500",
   onDark:
     "bg-white/10 text-white border border-white/30 backdrop-blur-sm hover:bg-white/20",
 };
@@ -47,7 +47,7 @@ export default function PillButton({
 }: PillButtonProps) {
   const classes = [
     "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-colors",
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-500 focus-visible:ring-offset-2",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2",
     sizeClasses[size],
     variantClasses[variant],
     fitWidth ? "w-fit" : "",

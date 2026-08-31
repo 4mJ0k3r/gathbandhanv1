@@ -27,11 +27,11 @@ export default function CtaSection({
   return (
     <Section background={background} width="narrow" className="text-center">
       {eyebrow && (
-        <span className="text-purple-500 text-xs font-semibold tracking-widest uppercase">
+        <span className="text-brand-500 text-xs font-semibold tracking-widest uppercase">
           {eyebrow}
         </span>
       )}
-      <h2 className="text-3xl md:text-4xl font-bold text-ink-900 tracking-tight mt-3">
+      <h2 className="font-display text-3xl font-normal text-ink-900 mt-3 md:text-4xl">
         {title}
       </h2>
       {subtitle && <p className="text-ink-500 mt-4 text-lg">{subtitle}</p>}

@@ -74,12 +74,12 @@ export default function ForVendorsPage() {
     <div>
       <section className="mx-6 mt-4 md:mx-10">
         <SplitHero image={IMAGES.balloonRelease} priority>
-          <span className="text-xs font-semibold uppercase tracking-widest text-purple-500">
+          <span className="text-xs font-semibold uppercase tracking-widest text-brand-500">
             For Vendors
           </span>
-          <h1 className="mt-3 text-4xl font-bold leading-[1.1] tracking-tight text-ink-900 md:text-5xl">
+          <h1 className="mt-3 font-display text-4xl font-normal leading-[1.15] text-ink-900 md:text-5xl">
             Get discovered by couples{" "}
-            <span className="text-purple-500">planning their wedding</span>
+            <span className="text-brand-500">planning their wedding</span>
           </h1>
           <p className="mt-4 text-lg leading-relaxed text-ink-500">
             List your business for free on Gathbandhan and start getting
@@ -104,7 +104,7 @@ export default function ForVendorsPage() {
             const Icon = prop.icon;
             return (
               <Card key={prop.title}>
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-50 text-purple-500">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-500">
                   <Icon className="h-6 w-6" strokeWidth={1.5} aria-hidden="true" />
                 </div>
                 <h3 className="mb-2 text-lg font-semibold text-ink-900">{prop.title}</h3>
@@ -126,7 +126,7 @@ export default function ForVendorsPage() {
               key={item.step}
               className="rounded-3xl border-card bg-surface-tint p-8 text-center"
             >
-              <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-purple-500 text-xl font-bold text-white">
+              <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-brand-500 text-xl font-bold text-white">
                 {item.step}
               </div>
               <h3 className="mb-2 text-lg font-semibold text-ink-900">{item.title}</h3>
@@ -147,7 +147,7 @@ export default function ForVendorsPage() {
             <li key={cat.value}>
               <Link
                 href={`/vendors?category=${cat.value}`}
-                className="inline-block rounded-full border border-purple-100 bg-white px-5 py-2.5 text-sm font-medium text-ink-700 transition-colors hover:border-purple-300 hover:bg-purple-50 hover:text-purple-500"
+                className="inline-block rounded-full border border-brand-100 bg-white px-5 py-2.5 text-sm font-medium text-ink-700 transition-colors hover:border-brand-300 hover:bg-brand-50 hover:text-brand-500"
               >
                 {cat.label}
               </Link>
@@ -156,7 +156,7 @@ export default function ForVendorsPage() {
         </ul>
         <p className="mt-6 text-sm text-ink-500">
           Don&apos;t see your category?{" "}
-          <Link href="/contact-us" className="text-purple-500 hover:underline">
+          <Link href="/contact-us" className="text-brand-500 hover:underline">
             Contact us
           </Link>
         </p>
